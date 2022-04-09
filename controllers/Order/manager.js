@@ -1,5 +1,6 @@
 const { ItemSchema } = require("../../models/Order");
 const { mongoose } = require("../../mongoose");
+const { sendEmail } = require('../../utils/mailer');
 
 /** Get filled object.
  * 
@@ -7,12 +8,12 @@ const { mongoose } = require("../../mongoose");
  */
 const getFilledObject = (order) => {
     const totals = calculateTotalForTargets(order);
-    order.target1Total = totals.target1Total;
-    order.target2Total = totals.target2Total;
+    order.target1Total = totals.target1Total.toFixed(2);
+    order.target2Total = totals.target2Total.toFixed(2);
 
     let temp = [];
     for (let item of order.items) {
-        item.price = parseFloat(item.price.toString());
+        item.price = parseFloat(item.price.toString()).toFixed(2);
         item.typeDesc = item.type === 'Individual' ? '个人' : item.type === 'Shared' ? '双人' : '三人';
         item.shareTypeDesc = getSharedTypeString(item.shareType, order.basicInfo.target1, order.basicInfo.target2);
         temp.push(item);
@@ -20,6 +21,13 @@ const getFilledObject = (order) => {
     order.items = temp;
 
     return order;
+}
+
+const sendNotificationMail = async () => {
+    const subject = "ATCWeb 新账单提醒";
+    const text = "ATCWeb 收到了新的账单。请访问History页面查看详情。http://www.atcweb.ml";
+    const html = "<p>ATCWeb 收到了新的账单。请访问History页面查看详情。http://www.atcweb.ml</p>";
+    sendEmail(subject, text, html);
 }
 
 function getSharedTypeString(shareType, target1, target2) {
@@ -91,5 +99,6 @@ function calculateItemPrice(item) {
 }
 
 module.exports = {
-    getFilledObject
+    getFilledObject,
+    sendNotificationMail
 }

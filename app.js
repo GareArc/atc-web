@@ -6,6 +6,9 @@ const { ErrorResponse } = require('./models/ErrorResponse');
 
 const app = express();
 
+// Static resources
+app.use(express.static(path.join(__dirname, "frontend", "build")));
+
 app.use(cors({
     origin: true,
     optionsSuccessStatus: 200,
@@ -29,11 +32,8 @@ app.use((req, res, next) => {
 app.use("/api", require("./controllers/Order").router);
 
 // 404 Error
-app.use("/api/*", (req, res) => {
-    res.status(404).json();
+app.use("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
-
-// Static resources
-app.use(express.static(path.join(__dirname, "/frontend/build")));
 
 module.exports = { app };

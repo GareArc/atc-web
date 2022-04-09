@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { ErrorResponse } = require("../../models/ErrorResponse");
 const { Order } = require("../../models/Order");
 const { uuidValidator } = require("../../utils/routerUtils");
-const { getFilledObject } = require("./manager");
+const { getFilledObject, sendNotificationMail } = require("./manager");
 
 
 const pathName = (path) => `/order${path}`;
@@ -29,6 +29,7 @@ router.post(pathName("/"), async (req, res) => {
             if(!req.body.date) req.body.date = new Date();
             const order = new Order(req.body);
             const ret = await order.save();
+            sendNotificationMail();
             res.json(ret);
         } catch (e) {
             res.status(500).json(new ErrorResponse(0, "Database error", e));
