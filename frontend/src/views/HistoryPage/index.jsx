@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, Container, Dialog, DialogActions, DialogTitle, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAllOrders } from "../../api/requests/order";
+import { getAllOrders, markAsFinished } from "../../api/requests/order";
 import { OrderDialog } from "./OrderDialog";
 
 /** @type {import("../../api/models/OrderResponse").IOrderResponse[]} */
@@ -26,6 +26,18 @@ export const HistoryPage = () => {
   const handleCheck = (order) => {
     setSelected(order);
     setOpen(true);
+  }
+
+  /**
+   * @param {import("../../api/models/OrderResponse").IOrderResponse} order 
+   */
+  const handleFinished = (order) => {
+    markAsFinished(order._id)
+      .then(() => {
+        setLoaing(true);
+        setOpen(false);
+      })
+      .catch(err => console.log(err));
   }
 
   useEffect(() => {
@@ -54,7 +66,14 @@ export const HistoryPage = () => {
               }}
             >
               {orders.map(order => (
-                <Card variant="elevation" sx={{height: 'fit-content', mr: '20px'}}>
+                <Card
+                  variant="elevation"
+                  sx={{
+                    height: 'fit-content',
+                    mr: '20px',
+                    bgcolor: order.finished ? '#a8d0f7' : 'white'
+                  }}
+                >
                   <CardContent>
                     <Typography gutterBottom variant="h5">
                       {`账单 ${new Date(order.date).toISOString().slice(0, 10)}`}
@@ -82,7 +101,7 @@ export const HistoryPage = () => {
             <DialogTitle>{`账单 ${selected._id}`}</DialogTitle>
             <OrderDialog selected={selected} />
             <DialogActions>
-              <Button color="warning">
+              <Button color="warning" onClick={() => handleFinished(selected)}>
                 Finished
               </Button>
               <Button color="primary" onClick={() => setOpen(false)}>
