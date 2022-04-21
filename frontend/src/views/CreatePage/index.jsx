@@ -5,6 +5,7 @@ import { BasicInfoPage } from "./BaiscInfoTab";
 import { NewItemTab } from "./NewItemTab";
 import { ItemListTab } from "./ItemListTab";
 import { SubmitTab } from "./SubmitTab";
+import { ImportTab } from "./ImportTab";
 
 /** @type {import("../../../../models/Order").IOrder} */
 const initOrder = {
@@ -33,6 +34,7 @@ export const CreatePage = () => {
           <Tab label="基本信息" />
           <Tab label="新物品" />
           <Tab label="已添加" />
+          <Tab label="导入JSON" />
           <Tab label="提交" />
         </Tabs>
       </AppBar>
@@ -47,6 +49,9 @@ export const CreatePage = () => {
         <ItemListTab order={ order } setOrder={ setOrder }/>
       </TabPanel>
       <TabPanel index={tabNum} value={3}>
+        <ImportTab order={order} setOrder={setOrder} />
+      </TabPanel>
+      <TabPanel index={tabNum} value={4}>
         <SubmitTab order={order} setOrder={setOrder} initOrder={ initOrder } />
       </TabPanel>
 

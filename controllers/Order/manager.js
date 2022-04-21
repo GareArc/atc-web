@@ -32,10 +32,10 @@ const sendNotificationMail = async () => {
 
 function getSharedTypeString(shareType, target1, target2) {
     if (shareType === 'WithT1') {
-        return `我和${target1}`;
+        return `账单登记者和${target1}`;
     }
     if (shareType === 'WithT2') {
-        return `我和${target2}`;
+        return `账单登记者和${target2}`;
     }
     else {
         return `${target1}和${target2}`;

@@ -1,8 +1,9 @@
 import { Button, Container, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch, TextField } from "@mui/material";
 import { useState } from "react";
+import { parseNumberHelper } from "../../../utils/validations";
 
 /** @type {import("../../../../../models/Order").IItem} */
-const initItem = {
+export const initItem = {
   title: "物品",
   price: 0,
   quantity: 1,
@@ -12,8 +13,7 @@ const initItem = {
   target: "Charlie"
 }
 const parseHelper = (e) => {
-  if (Number.isNaN(parseFloat(e.target.value))) return null;
-  return parseFloat(e.target.value);
+  return parseNumberHelper(e.target.value);
 }
 /**
  * 
@@ -123,7 +123,7 @@ export const NewItemTab = (props) => {
             label="物品价格"
             sx={{ m: '5%', width: '300px'}}
             type="number"
-            defaultValue={order.basicInfo.electric}
+            defaultValue={item.price}
             inputProps={{ min: "0", step: "0.01" }}
             onChange={e => setItem(i => ({...i, price: parseHelper(e)}))}
           />

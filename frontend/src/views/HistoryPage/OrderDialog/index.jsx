@@ -40,7 +40,7 @@ export const OrderDialog = (props) => {
     return false;
   }
   return (
-    <dic>
+    <div>
       {selected !== null && (
         <Container
           maxWidth={false}
@@ -193,6 +193,6 @@ export const OrderDialog = (props) => {
           </Container>
         </Container>
       )}
-    </dic>
+    </div>
   )
 }
