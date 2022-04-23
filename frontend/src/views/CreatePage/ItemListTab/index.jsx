@@ -1,9 +1,10 @@
 import { Avatar, Button, Container, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Radio, RadioGroup, Switch, TextField, Typography } from "@mui/material";
-import { Delete, ShoppingBag, Edit } from "@mui/icons-material";
+import { Delete, ShoppingBag, Edit, FileCopy } from "@mui/icons-material";
 import uuid from "react-uuid";
 import { useEffect, useState } from "react";
 import { parseNumberHelper } from "../../../utils/validations";
 import { initItem } from "../NewItemTab";
+import { scrollToBottom } from "../../../utils/dom";
 
 /**
  * 
@@ -41,6 +42,11 @@ export const ItemListTab = (props) => {
   const deleteItem = (item) => {
     const items = order.items.filter(i => i !== item);
     setOrder(o => ({ ...o, items: items }));
+  }
+
+  const handleDuplicate = (item) => {
+    setOrder(o => ({ ...o, items: o.items.concat(Object.assign({}, item)) }));
+    scrollToBottom();
   }
 
   /** Get description of the item relation.
@@ -116,6 +122,9 @@ export const ItemListTab = (props) => {
                 </IconButton>
                 <IconButton edge="end" onClick={() => handleOpen(item)}>
                   <Edit />
+                </IconButton>
+                <IconButton edge="end" onClick={() => handleDuplicate(item)}>
+                  <FileCopy />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>

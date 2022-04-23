@@ -1,5 +1,5 @@
 import { Alert, AlertTitle, Button, Container, Stack, TextField, Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 export const ImportTab = (props) => {
@@ -7,6 +7,7 @@ export const ImportTab = (props) => {
   const [json, setJson] = useState("");
   const [importing, setImporting] = useState(false);
   const [showError, setShowErr] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (importing) {
@@ -22,12 +23,14 @@ export const ImportTab = (props) => {
           quantity: i.quantity,
           isTaxed: i.chargeTax
         }));
-        setOrder(o => ({ ...o, items: items }))
+        setOrder(o => ({ ...o, items: items }));
+        setJson("");
       } catch (err) {
         setShowErr(true);
         console.log(err, json);
       } finally {
         setImporting(false);
+        setShowSuccess(true);
       }
     }
   }, [importing])
@@ -61,6 +64,7 @@ export const ImportTab = (props) => {
             multiline
             rows={8}
             placeholder="在此处粘贴JSON"
+            defaultValue={json}
             sx={{
               width: '60%',
               mb: '1%'
@@ -72,10 +76,22 @@ export const ImportTab = (props) => {
               <Alert
                 severity="error"
                 onClose={() => setShowErr(false)}
-                sx={{ width: 'fit-content', mb: '1%'}}
+                sx={{ width: 'fit-content', mb: '1%' }}
               >
                 <AlertTitle>Invalid JSON</AlertTitle>
                 JSON格式不正确, 请检查后重试。
+              </Alert>
+            )
+          }
+          {
+            showSuccess && (
+              <Alert
+                severity="success"
+                onClose={() => setShowSuccess(false)}
+                sx={{ width: 'fit-content', mb: '1%' }}
+              >
+                <AlertTitle>导入成功!</AlertTitle>
+                请在物品列表查看和修改。
               </Alert>
             )
           }
