@@ -18,3 +18,13 @@ export const getAllOrders = async () => {
 export const markAsFinished = async (uuid) => {
     return patch(pathName(`/finish/${uuid}`));
 }
+
+/** Mark one's transfer done.
+ * 
+ * @param {string} uuid 
+ * @param {1 | 2} targetCode 
+ * @returns 
+ */
+export const markTransfer = async (uuid, targetCode) => {
+    return patch(pathName(`/trans/${uuid}`), { target: targetCode });
+}

@@ -71,6 +71,14 @@ const OrderSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    transferT1: {
+        type: Boolean,
+        default: false
+    },
+    transferT2: {
+        type: Boolean,
+        default: false
+    },
     basicInfo: {
         type: BasicInfoSchema,
         required: true,

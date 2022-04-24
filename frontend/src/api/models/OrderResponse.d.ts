@@ -19,4 +19,6 @@ export declare interface IOrderResponse {
     items: IItemResponse[];
     target1Total: number;
     target2Total: number;
+    transferT1: boolean;
+    transferT2: boolean;
 }

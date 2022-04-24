@@ -8,7 +8,7 @@ ATC Web
 1. Add bills and check bills.
 2. Automatically calculate total payment for users.
 3. Mark a bill as finished.
-4. Import JSON billing information from [DMall](https://dmallgrocery.com/).
+4. Import JSON billing information from [DMall](https://mysterious-scrubland-59461.herokuapp.com).
 5. Mailing notification when new bill is uploaded.
 
 ## Website Infomation

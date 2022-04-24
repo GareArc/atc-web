@@ -1,7 +1,9 @@
-import { Button, Card, CardActions, CardContent, Container, Dialog, DialogActions, DialogTitle, Typography } from "@mui/material";
+import { Box, Button, Card, CardActions, CardContent, Container, Dialog, DialogActions, DialogTitle, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAllOrders, markAsFinished } from "../../api/requests/order";
 import { OrderDialog } from "./OrderDialog";
+import { PendingActions, CreditScore } from "@mui/icons-material";
+import uuid from "react-uuid";
 
 /** @type {import("../../api/models/OrderResponse").IOrderResponse[]} */
 const initOrders = [];
@@ -67,6 +69,7 @@ export const HistoryPage = () => {
             >
               {orders.map(order => (
                 <Card
+                  key={uuid()}
                   variant="elevation"
                   sx={{
                     height: 'fit-content',
@@ -84,6 +87,17 @@ export const HistoryPage = () => {
                     <Typography variant="body2">
                       {order._id}
                     </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'space-evenly',
+                        mt: '2%'
+                      }}
+                    >
+                      {!order.transferT1 ? (<div><PendingActions color="warning"/>{`${order.basicInfo.target1}`}</div>) : (<div><CreditScore color="success"/></div>) }
+                      {!order.transferT2 ? (<div><PendingActions color="warning"/>{`${order.basicInfo.target2}`}</div>) : (<div><CreditScore color="success"/></div>) }
+                    </Box>
                   </CardContent>
                   <CardActions>
                     <Button color="primary" onClick={() => handleCheck(order)}>
@@ -102,9 +116,9 @@ export const HistoryPage = () => {
             maxWidth="fit-content"
           >
             <DialogTitle>{`账单 ${selected._id}`}</DialogTitle>
-            <OrderDialog selected={selected} />
+            <OrderDialog selected={selected} onTransfer={() => { setLoaing(true); setOpen(false); }} />
             <DialogActions>
-              <Button color="warning" onClick={() => handleFinished(selected)}>
+              <Button disabled={selected.finished} color="warning" onClick={() => handleFinished(selected)}>
                 Finished
               </Button>
               <Button color="primary" onClick={() => setOpen(false)}>

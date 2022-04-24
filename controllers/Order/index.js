@@ -80,4 +80,24 @@ router.patch(pathName("/finish/:uuid"), uuidValidator, async (req, res) => {
     }
 });
 
+/** Report one target that has done the bill transfer.
+ * Expected request body:
+ * {
+ *      target: 1 | 2
+ * }
+ */
+router.patch(pathName("/trans/:uuid"), uuidValidator, async (req, res) => {
+    if (req.body) {
+        const order = await Order.findById(req.params.uuid);
+        if (req.body.target === 1) order.transferT1 = true;
+        else order.transferT2 = true;
+    
+        order.save()
+            .then(() => res.json("success"))
+            .catch(e => res.status(500).json(new ErrorResponse(0, "Database error", e)));
+        return;
+    }
+    else res.status(400).json(new ErrorResponse(2, "Request body required."));
+});
+
 module.exports = { router };

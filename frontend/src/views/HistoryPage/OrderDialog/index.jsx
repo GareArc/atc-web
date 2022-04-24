@@ -2,6 +2,8 @@ import { Avatar, Button, Collapse, Container, Divider, Grid, List, ListItem, Lis
 import { useState } from "react";
 import { ExpandLess, ExpandMore, ShoppingBag } from "@mui/icons-material";
 import uuid from "react-uuid";
+import { Box } from "@mui/system";
+import { markTransfer } from "../../../api/requests/order";
 
 /**
  * 
@@ -10,11 +12,17 @@ import uuid from "react-uuid";
  * }} props  
  */
 export const OrderDialog = (props) => {
-  const { selected } = props;
+  const { selected, onTransfer } = props;
   const [openBasic, setOpenBaisc] = useState(false);
   const [openAll, setOpenAll] = useState(false);
   const [openT1, setOpenT1] = useState(false);
   const [openT2, setOpenT2] = useState(false);
+
+  const handleTransferBtnClick = (code) => {
+    markTransfer(selected._id, code)
+      .then(() => onTransfer())
+      .catch(e => console.log(e));
+  }
 
   /**
    * @param {import("../../../api/models/OrderResponse").IOrderResponse} order 
@@ -63,16 +71,41 @@ export const OrderDialog = (props) => {
               padding: '0 !important'
             }}
           >
-            <Paper sx={{height: '100%', overflow: 'auto', width: '100%'}}>
+            <Paper sx={{ height: '100%', overflow: 'auto', width: '100%' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  mt: '2%',
+                  mb: '2%'
+                }}
+              >
+                <Button
+                  disabled={selected.transferT1}
+                  color="primary"
+                  variant="contained"
+                  onClick={() => handleTransferBtnClick(1)}
+                >
+                  {`${selected.basicInfo.target1}已转`}
+                </Button>
+                <Button
+                  disabled={selected.transferT2}
+                  color="primary"
+                  variant="contained"
+                  onClick={() => handleTransferBtnClick(2)}
+                >
+                  {`${selected.basicInfo.target2}已转`}
+                </Button>
+              </Box>
               <List>
                 <ListItem>
                   <ListItemText primary={`${selected.basicInfo.target1}总计: $${selected.target1Total}`} />
                   <ListItemText primary={`${selected.basicInfo.target2}总计: $${selected.target2Total}`} />
                 </ListItem>
                 {/* Basic info */}
-                <ListItem button onClick={() => setOpenBaisc(!openBasic)} sx={{minWidth: '300px'}}>
+                <ListItem button onClick={() => setOpenBaisc(!openBasic)} sx={{ minWidth: '300px' }}>
                   <ListItemText primary="基本信息" />
-                  {openBasic? <ExpandLess /> : <ExpandMore />}
+                  {openBasic ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={openBasic} timeout="auto" unmountOnExit>
                   <List component="div">
@@ -94,13 +127,13 @@ export const OrderDialog = (props) => {
                     <ListItem>
                       <ListItemText primary={`其他: $${selected.basicInfo.other}`} />
                     </ListItem>
-                    
+
                   </List>
                 </Collapse>
                 {/* All */}
-                <ListItem button onClick={() => setOpenAll(!openAll)} sx={{minWidth: '300px'}}>
+                <ListItem button onClick={() => setOpenAll(!openAll)} sx={{ minWidth: '300px' }}>
                   <ListItemText primary="三人部分" />
-                  {openAll? <ExpandLess /> : <ExpandMore />}
+                  {openAll ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={openAll} timeout="auto" unmountOnExit>
                   <List component="div">
@@ -115,22 +148,22 @@ export const OrderDialog = (props) => {
                         </ListItemAvatar>
                         <ListItemText
                           primary={item.title}
-                          secondary={ 
+                          secondary={
                             `价格: $${item.price} 数量: ${item.quantity} ${item.isTaxed ? "收税" : "不收税"}`
                           }
                         />
                         <ListItemText
                           primary="三人"
-                          sx={{ ml: '15px'}}
+                          sx={{ ml: '15px' }}
                         />
                       </ListItem>
                     ))}
                   </List>
                 </Collapse>
                 {/* Target 1 */}
-                <ListItem button onClick={() => setOpenT1(!openT1)} sx={{minWidth: '300px'}}>
+                <ListItem button onClick={() => setOpenT1(!openT1)} sx={{ minWidth: '300px' }}>
                   <ListItemText primary={`${selected.basicInfo.target1}部分`} />
-                  {openT1? <ExpandLess /> : <ExpandMore />}
+                  {openT1 ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={openT1} timeout="auto" unmountOnExit>
                   <List component="div">
@@ -145,22 +178,22 @@ export const OrderDialog = (props) => {
                         </ListItemAvatar>
                         <ListItemText
                           primary={item.title}
-                          secondary={ 
+                          secondary={
                             `价格: $${item.price} 数量: ${item.quantity} ${item.isTaxed ? "收税" : "不收税"}`
                           }
                         />
                         <ListItemText
                           primary={item.type === "Shared" ? item.shareTypeDesc : item.target}
-                          sx={{ ml: '15px'}}
+                          sx={{ ml: '15px' }}
                         />
                       </ListItem>
                     ))}
                   </List>
                 </Collapse>
                 {/* Target 2 */}
-                <ListItem button onClick={() => setOpenT2(!openT2)} sx={{minWidth: '300px'}}>
+                <ListItem button onClick={() => setOpenT2(!openT2)} sx={{ minWidth: '300px' }}>
                   <ListItemText primary={`${selected.basicInfo.target2}部分`} />
-                  {openT1? <ExpandLess /> : <ExpandMore />}
+                  {openT1 ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={openT2} timeout="auto" unmountOnExit>
                   <List component="div">
@@ -175,13 +208,13 @@ export const OrderDialog = (props) => {
                         </ListItemAvatar>
                         <ListItemText
                           primary={item.title}
-                          secondary={ 
+                          secondary={
                             `价格: $${item.price} 数量: ${item.quantity} ${item.isTaxed ? "收税" : "不收税"}`
                           }
                         />
                         <ListItemText
                           primary={item.type === "Shared" ? item.shareTypeDesc : item.target}
-                          sx={{ ml: '15px'}}
+                          sx={{ ml: '15px' }}
                         />
                       </ListItem>
                     ))}

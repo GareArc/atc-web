@@ -23,6 +23,8 @@ export declare interface IOrder {
     date: Date;
     basicInfo: IBasicInfo;
     finished: boolean;
+    transferT1: boolean;
+    transferT2: boolean;
     items: IItem[]
 }
 export declare const ItemSchema: Schema<IItem>;

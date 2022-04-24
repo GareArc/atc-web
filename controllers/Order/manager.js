@@ -25,8 +25,8 @@ const getFilledObject = (order) => {
 
 const sendNotificationMail = async () => {
     const subject = "ATCWeb 新账单提醒";
-    const text = "ATCWeb 收到了新的账单。请访问History页面查看详情。http://www.atcweb.ml";
-    const html = "<p>ATCWeb 收到了新的账单。请访问History页面查看详情。http://www.atcweb.ml</p>";
+    const text = "ATCWeb 收到了新的账单。请访问History页面查看详情。https://mysterious-scrubland-59461.herokuapp.com";
+    const html = "<p>ATCWeb 收到了新的账单。请访问History页面查看详情。https://mysterious-scrubland-59461.herokuapp.com</p>";
     sendEmail(subject, text, html);
 }
 
