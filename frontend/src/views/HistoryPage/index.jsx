@@ -71,7 +71,10 @@ export const HistoryPage = () => {
                   sx={{
                     height: 'fit-content',
                     mr: '20px',
-                    bgcolor: order.finished ? '#a8d0f7' : 'white'
+                    bgcolor: order.finished ? '#a8d0f7' : 'white',
+                    flex: '0 0 220px',
+                    overflow: "hidden",
+                    mb: '25px'
                   }}
                 >
                   <CardContent>

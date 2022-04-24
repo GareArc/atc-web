@@ -19,7 +19,7 @@ const sendEmail = async (subject, text, html) => {
         subject: subject,
         text: text,
         html: html
-    }).catch(e => { });
+    }).catch(e => console.log(e));
 }
 
 module.exports = {

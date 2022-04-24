@@ -33,7 +33,7 @@ const sendNotificationMail = async () => {
 const sendFinishConfirmMail = async (uuid, time, target1, target2) => {
     const subject = "ATCWeb 有一个账单被标记为完成。";
     const text = `UUID: ${uuid}\nTime: ${time}\n对象: ${target1}, ${target2}`;
-    const html = `<p>UUID: ${uuid}</p><p></p>Time: ${time}<p>对象: ${target1}, ${target2}</p>`;
+    const html = `<div><p>UUID: ${uuid}</p><p></p>Time: ${time}<p>对象: ${target1}, ${target2}</p></div>`;
     sendEmail(subject, text, html);
 }
 
