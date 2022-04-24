@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { ErrorResponse } = require("../../models/ErrorResponse");
 const { Order } = require("../../models/Order");
 const { uuidValidator } = require("../../utils/routerUtils");
-const { getFilledObject, sendNotificationMail } = require("./manager");
+const { getFilledObject, sendNotificationMail, sendFinishConfirmMail } = require("./manager");
 
 
 const pathName = (path) => `/order${path}`;
@@ -70,6 +70,7 @@ router.patch(pathName("/finish/:uuid"), uuidValidator, async (req, res) => {
             }
             order.finished = true;
             await order.save();
+            sendFinishConfirmMail(order._id, order.date.toString(), order.basicInfo.target1, order.basicInfo.target2);
             res.json("success");
         } catch (e) {
             res.status(500).json(new ErrorResponse(0, "Database error", e));

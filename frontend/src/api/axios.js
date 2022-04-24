@@ -14,9 +14,10 @@ const instance = axios.create({
  * @param params  
  * @returns {Promise}
  */
- export function get(url, params = {}) {
+export function get(url, params = {}, config = {}) {
+    config = ({...config, params: params});
     return new Promise((resolve, reject) => {
-        instance.get(url, { params: params })
+        instance.get(url, config)
             .then((response) => {
                 resolve(response.data);
             })
@@ -33,9 +34,9 @@ const instance = axios.create({
  * @returns {Promise}
  */
 
- export function post(url, data) {
+ export function post(url, data, config) {
     return new Promise((resolve, reject) => {
-        instance.post(url, data)
+        instance.post(url, data, config)
             .then((response) => {
                 resolve(response.data);
             },

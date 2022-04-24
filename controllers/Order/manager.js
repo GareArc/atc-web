@@ -30,6 +30,13 @@ const sendNotificationMail = async () => {
     sendEmail(subject, text, html);
 }
 
+const sendFinishConfirmMail = async (uuid, time, target1, target2) => {
+    const subject = "ATCWeb 有一个账单被标记为完成。";
+    const text = `UUID: ${uuid}\nTime: ${time}\n对象: ${target1}, ${target2}`;
+    const html = `<p>UUID: ${uuid}</p><p></p>Time: ${time}<p>对象: ${target1}, ${target2}</p>`;
+    sendEmail(subject, text, html);
+}
+
 function getSharedTypeString(shareType, target1, target2) {
     if (shareType === 'WithT1') {
         return `账单登记者和${target1}`;
@@ -100,5 +107,6 @@ function calculateItemPrice(item) {
 
 module.exports = {
     getFilledObject,
-    sendNotificationMail
+    sendNotificationMail,
+    sendFinishConfirmMail
 }

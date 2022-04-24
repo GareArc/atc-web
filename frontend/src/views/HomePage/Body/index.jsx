@@ -1,7 +1,8 @@
-import { Container, Typography } from "@mui/material"
+import { Container, Typography } from "@mui/material";
+import { ChangeLog } from "./Changelog";
 
 export const HomePageBody = () => {
-  
+
   return (
     <Container maxWidth={false} sx={{
       bgcolor: 'white',
@@ -19,6 +20,8 @@ export const HomePageBody = () => {
       <Typography variant="body1" sx={{ mt: 5}}>
         By Gareth.
       </Typography>
+
+      <ChangeLog />
     </Container >
   )
 }
