@@ -12,7 +12,7 @@ ATC Web
 5. Mailing notification when new bill is uploaded.
 
 ## Website Infomation
-+ Link: http://www.atcweb.ml
++ Link: https://mysterious-scrubland-59461.herokuapp.com/
 
 ## Tech Stack
 + Frontend: React Framework
