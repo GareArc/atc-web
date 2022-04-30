@@ -1,3 +1,4 @@
+const { parseDecimalHelper } = require("../../utils/parse");
 const { ItemSchema } = require("../../models/Order");
 const { mongoose } = require("../../mongoose");
 const { sendEmail } = require('../../utils/mailer');
@@ -14,7 +15,7 @@ const getFilledObject = (order) => {
     let temp = [];
     for (let item of order.items) {
         item.price = parseFloat(item.price.toString()).toFixed(2);
-        item.typeDesc = item.type === 'Individual' ? '个人' : item.type === 'Shared' ? '双人' : '三人';
+        item.typeDesc = item.type === 'Individual' ? '个人' : item.type === 'Shared' ? '双人' : item.type === "All" ? '三人' : '按比例';
         item.shareTypeDesc = getSharedTypeString(item.shareType, order.basicInfo.target1, order.basicInfo.target2);
         temp.push(item);
     }
@@ -66,7 +67,7 @@ function calculateTotalForTargets(order) {
         order.basicInfo.electric +
         order.basicInfo.internet +
         order.basicInfo.other) / 3;
-    
+
     for (let item of order.items) {
         const price = calculateItemPrice(item);
         if (item.type === "All") {
@@ -85,7 +86,7 @@ function calculateTotalForTargets(order) {
                 result.target2Total += price / 2;
             }
         }
-        else {
+        else if (item.type === "Individual") {
             if (item.target === order.basicInfo.target1) {
                 result.target1Total += price;
             }
@@ -93,7 +94,13 @@ function calculateTotalForTargets(order) {
                 result.target2Total += price;
             }
         }
+        else if (item.type === "Ratio") {
+            console.log(result.target1Total);
+            result.target1Total += price * (parseDecimalHelper(item.ratio.target1) / (parseDecimalHelper(item.ratio.target1) + parseDecimalHelper(item.ratio.target2) + parseDecimalHelper(item.ratio.self)));
+            result.target2Total += price * (parseDecimalHelper(item.ratio.target2) / (parseDecimalHelper(item.ratio.target1) + parseDecimalHelper(item.ratio.target2) + parseDecimalHelper(item.ratio.self)));
+        }
     }
+    console.log(result);
     return result;
 }
 
@@ -102,7 +109,7 @@ function calculateTotalForTargets(order) {
  * @param {import("../../models/Order").IItem} item 
  */
 function calculateItemPrice(item) {
-    return item.price * item.quantity * (item.isTaxed ? 1.13 : 1);
+    return parseDecimalHelper(item.price)  * item.quantity * (item.isTaxed ? 1.13 : 1);
 }
 
 module.exports = {

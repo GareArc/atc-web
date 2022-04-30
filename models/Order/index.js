@@ -1,5 +1,20 @@
 const { mongoose } = require("../../mongoose");
 
+const RatioSchema = new mongoose.Schema({
+    target1: {
+        type: mongoose.Types.Decimal128,
+        default: 0
+    },
+    target2: {
+        type: mongoose.Types.Decimal128,
+        default: 0
+    },
+    self: {
+        type: mongoose.Types.Decimal128,
+        default: 0
+    },
+});
+
 const ItemSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -7,7 +22,7 @@ const ItemSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['Individual', 'Shared', 'All'],
+        enum: ['Individual', 'Shared', 'All', 'Ratio'],
         required: true
     },
     shareType: {
@@ -18,6 +33,9 @@ const ItemSchema = new mongoose.Schema({
     target: {
         type: String,
         enum: ['Gareth', 'Ethan', 'Charlie'],
+    },
+    ratio: {
+        type: RatioSchema
     },
     price: {
         type: mongoose.Types.Decimal128,
@@ -89,6 +107,7 @@ const OrderSchema = new mongoose.Schema({
 const Order = mongoose.model("Order", OrderSchema);
 
 module.exports = {
+    RatioSchema,
     BasicInfoSchema,
     ItemSchema,
     OrderSchema,

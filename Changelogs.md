@@ -5,7 +5,7 @@ Development Changelogs
 | Feature | Description | Finished
 | :--- | :--- | :---: |
 | Report payment transfer by targets | For each bill, report a payment transfer which is done by one of the targets. | :white_check_mark: |
-| Split payment | Support splitting the payment of an item in a given ratio. | :white_large_square: |
+| Split payment | Support splitting the payment of an item in a given ratio. | :white_check_mark: |
 | Live analysis | Live analysis of bills for each user including monthly total payment and maybe item purchase count on DMall. | :white_large_square: |
 
 ## DEV-v2 

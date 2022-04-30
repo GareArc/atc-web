@@ -4,6 +4,7 @@ import { ExpandLess, ExpandMore, ShoppingBag } from "@mui/icons-material";
 import uuid from "react-uuid";
 import { Box } from "@mui/system";
 import { markTransfer } from "../../../api/requests/order";
+import { parseNumberHelper } from "../../../utils/validations";
 
 /**
  * 
@@ -25,10 +26,36 @@ export const OrderDialog = (props) => {
   }
 
   /**
+   * @param {import("../../../api/models/OrderResponse").IItemResponse} item 
+   * @returns {boolean}
+   */
+  const inAllList = (item) => {
+    return item.type === "All" || (item.type === "Ratio" && parseNumberHelper(item.ratio.self.$numberDecimal)  * parseNumberHelper(item.ratio.target1.$numberDecimal) * parseNumberHelper(item.ratio.target2.$numberDecimal) !== 0);
+  }
+
+  /**
+   * @param {import("../../../api/models/OrderResponse").IItemResponse} item 
+   * @param {import("../../../api/models/OrderResponse").IOrderResponse} order
+   * @returns {boolean}
+   */
+  const inTarget1List = (order, item) => {
+    return belongToTarget(order, item, 1) || (item.type === "Ratio" && parseNumberHelper(item.ratio.target1.$numberDecimal) !== 0);
+  }
+
+  /**
+   * @param {import("../../../api/models/OrderResponse").IItemResponse} item 
+   * @param {import("../../../api/models/OrderResponse").IOrderResponse} order
+   * @returns {boolean}
+   */
+  const inTarget2List = (order, item) => {
+    return belongToTarget(order, item, 2) || (item.type === "Ratio" && parseNumberHelper(item.ratio.target2.$numberDecimal) !== 0);
+  }
+
+  /**
    * @param {import("../../../api/models/OrderResponse").IOrderResponse} order 
    * @param {import("../../../api/models/OrderResponse").IItemResponse} item 
    */
-  const belongToT = (order, item, target) => {
+  const belongToTarget = (order, item, target) => {
     if (item.type === "Shared") {
       if (target === 1) {
         if (item.shareType === "T1T2" || item.shareType === "WithT1") return true;
@@ -137,7 +164,7 @@ export const OrderDialog = (props) => {
                 </ListItem>
                 <Collapse in={openAll} timeout="auto" unmountOnExit>
                   <List component="div">
-                    {selected.items.map(item => item.type === "All" && (
+                    {selected.items.map(item => inAllList(item) && (
                       <ListItem
                         key={uuid()}
                       >
@@ -154,6 +181,7 @@ export const OrderDialog = (props) => {
                         />
                         <ListItemText
                           primary="三人"
+                          secondary={item.type === "Ratio" ? `按比例${item.ratio.target1.$numberDecimal}:${item.ratio.target2.$numberDecimal}:${item.ratio.self.$numberDecimal}` : ""}
                           sx={{ ml: '15px' }}
                         />
                       </ListItem>
@@ -167,7 +195,7 @@ export const OrderDialog = (props) => {
                 </ListItem>
                 <Collapse in={openT1} timeout="auto" unmountOnExit>
                   <List component="div">
-                    {selected.items.map(item => belongToT(selected, item, 1) && (
+                    {selected.items.map(item => inTarget1List(selected, item) && (
                       <ListItem
                         key={uuid()}
                       >
@@ -183,7 +211,7 @@ export const OrderDialog = (props) => {
                           }
                         />
                         <ListItemText
-                          primary={item.type === "Shared" ? item.shareTypeDesc : item.target}
+                          secondary={item.type === "Shared" ? item.shareTypeDesc : item.type === "Ratio" ? <>按比例 <strong>{item.ratio.target1.$numberDecimal}</strong>{`:${item.ratio.target2.$numberDecimal}:${item.ratio.self.$numberDecimal}`}</> : item.target}
                           sx={{ ml: '15px' }}
                         />
                       </ListItem>
@@ -197,7 +225,7 @@ export const OrderDialog = (props) => {
                 </ListItem>
                 <Collapse in={openT2} timeout="auto" unmountOnExit>
                   <List component="div">
-                    {selected.items.map(item => belongToT(selected, item, 2) && (
+                    {selected.items.map(item => inTarget2List(selected, item) && (
                       <ListItem
                         key={uuid()}
                       >
@@ -213,7 +241,7 @@ export const OrderDialog = (props) => {
                           }
                         />
                         <ListItemText
-                          primary={item.type === "Shared" ? item.shareTypeDesc : item.target}
+                          secondary={item.type === "Shared" ? item.shareTypeDesc : item.type === "Ratio" ? <>按比例 <strong>{item.ratio.target2.$numberDecimal}</strong>{`:${item.ratio.target1.$numberDecimal}:${item.ratio.self.$numberDecimal}`}</> : item.target}
                           sx={{ ml: '15px' }}
                         />
                       </ListItem>

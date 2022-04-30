@@ -55,7 +55,7 @@ export const ItemListTab = (props) => {
   const getRelationString = (item) => {
     if (item.type === "All") return "三人";
     else if (item.type === "Individual") return item.target;
-    else {
+    else if (item.type === "Shared") {
       if (item.shareType === 'WithT1') {
         return `我和${order.basicInfo.target1}`;
       }
@@ -65,6 +65,9 @@ export const ItemListTab = (props) => {
       else {
         return `${order.basicInfo.target1}和${order.basicInfo.target2}`;
       }
+    }
+    else if (item.type === "Ratio") {
+      return `按比例 ${item.ratio.target1}:${item.ratio.target2}:${item.ratio.self}`;
     }
   }
 

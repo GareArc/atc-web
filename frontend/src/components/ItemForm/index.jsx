@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch, TextField } from "@mui/material";
+import { Box, Button, Container, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch, TextField, Typography } from "@mui/material";
 import { useState } from 'react';
 import { parseNumberHelper } from "../../utils/validations";
 
@@ -10,7 +10,12 @@ export const initItem = {
   isTaxed: false,
   type: "All",
   shareType: "WithT1",
-  target: "Charlie"
+  target: "Charlie",
+  ratio: {
+    self: 0,
+    target1: 0,
+    target2: 0
+  }
 }
 
 const parseHelper = (e) => {
@@ -77,13 +82,14 @@ export const ItemForm = (props) => {
         width: 'max-content',
       }}
     >
+      {/* <>{ JSON.stringify(itemState) }</> */}
       <Container
         maxWidth={false}
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minWidth: '400px',
-          alignItems: 'flex-start'
+          width: '500px',
+          alignItems: 'center'
         }}
       >
         <TextField
@@ -92,7 +98,7 @@ export const ItemForm = (props) => {
           label="物品描述"
           sx={{
             m: '5%',
-            width: '300px'
+            width: '80%'
           }}
           type="text"
           defaultValue={itemState.title}
@@ -109,6 +115,7 @@ export const ItemForm = (props) => {
             <FormControlLabel value="All" control={<Radio />} label="三人" />
             <FormControlLabel value="Shared" control={<Radio />} label="双人" />
             <FormControlLabel value="Individual" control={<Radio />} label="个人" />
+            <FormControlLabel value="Ratio" control={<Radio />} label="按比例" />
           </RadioGroup>
         </FormControl>
         {
@@ -144,21 +151,61 @@ export const ItemForm = (props) => {
             </FormControl>
           )
         }
+        {
+          itemState.type === "Ratio" && (
+            <Box>
+              <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                <Typography variant="body2" color="GrayText">
+                  按照下面的比例计算每个人的付款数值, 0为不参与
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <TextField
+                  error={itemState.ratio.target1 === null}
+                  label={`${order.basicInfo.target1}`}
+                  type="number"
+                  defaultValue={itemState.ratio.target1}
+                  inputProps={{ inputMode: 'numeric', min: "0", step: 0.01 }}
+                  sx={{ mb: '5%', mt: '5%', width: '20%' }}
+                  onChange={e => setItemState(i => ({...i, ratio: {...i.ratio, target1: parseHelper(e)}}))}
+                />
+                <TextField
+                  error={itemState.ratio.target2 === null}
+                  label={`${order.basicInfo.target2}`}
+                  type="number"
+                  defaultValue={itemState.ratio.target2}
+                  inputProps={{ inputMode: 'numeric', min: "0", step: 0.01 }}
+                  sx={{ mb: '5%', mt: '5%', width: '20%' }}
+                  onChange={e => setItemState(i => ({...i, ratio: {...i.ratio, target2: parseHelper(e)}}))}
+                />
+                <TextField
+                  error={itemState.ratio.self === null}
+                  label="我"
+                  type="number"
+                  defaultValue={itemState.ratio.self}
+                  inputProps={{ inputMode: 'numeric', min: "0", step: 0.01 }}
+                  sx={{ mb: '5%', mt: '5%', width: '20%' }}
+                  onChange={e => setItemState(i => ({...i, ratio: {...i.ratio, self: parseHelper(e)}}))}
+                />
+              </Box>
+            </Box>
+          )
+        }
         <TextField
           error={itemState.price === null}
           helperText={itemState.price === null ? "Invalid Number" : ""}
           label="物品价格"
-          sx={{ m: '5%', width: '300px' }}
+          sx={{ m: '5%', width: '80%' }}
           type="number"
           defaultValue={itemState.price}
-          inputProps={{ min: "0", step: "0.01" }}
+          inputProps={{ min: "0", step: 0.01 }}
           onChange={e => setItemState(i => ({ ...i, price: parseHelper(e) }))}
         />
         <TextField
           error={itemState.quantity === null}
           helperText={itemState.quantity === null ? "Invalid Number" : ""}
           label="物品数量"
-          sx={{ m: '5%', width: '300px' }}
+          sx={{ m: '5%', width: '80%' }}
           type="number"
           defaultValue={itemState.quantity}
           inputProps={{ min: "1", step: "1" }}
@@ -175,7 +222,7 @@ export const ItemForm = (props) => {
             }
             label="是否收税"
             labelPlacement="start"
-            sx={{ flexDirection: 'row', m: '5%' }}
+            sx={{ flexDirection: 'row', m: '5%', minWidth: '144px' }}
           />
         </FormControl>
         <Container
@@ -186,7 +233,7 @@ export const ItemForm = (props) => {
             color="primary"
             sx={{
               mt: '3%',
-              width: '80%'
+              width: '50%'
             }}
             onClick={onClickSubmit}
           >
