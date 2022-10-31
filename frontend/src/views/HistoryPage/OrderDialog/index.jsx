@@ -166,7 +166,7 @@ export const OrderDialog = (props) => {
                   <List component="div">
                     {selected.items.map(item => inAllList(item) && (
                       <ListItem
-                        key={uuid()}
+                        key={item._id}
                       >
                         <ListItemAvatar>
                           <Avatar>
@@ -197,7 +197,7 @@ export const OrderDialog = (props) => {
                   <List component="div">
                     {selected.items.map(item => inTarget1List(selected, item) && (
                       <ListItem
-                        key={uuid()}
+                        key={item._id}
                       >
                         <ListItemAvatar>
                           <Avatar>
@@ -227,7 +227,7 @@ export const OrderDialog = (props) => {
                   <List component="div">
                     {selected.items.map(item => inTarget2List(selected, item) && (
                       <ListItem
-                        key={uuid()}
+                        key={item_id}
                       >
                         <ListItemAvatar>
                           <Avatar>

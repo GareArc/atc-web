@@ -26,7 +26,8 @@ router.get(pathName("/all"), async (req, res) => {
 router.post(pathName("/"), async (req, res) => {
     if (req.body) {
         try {
-            if(!req.body.date) req.body.date = new Date();
+            if (!req.body.date) req.body.date = new Date();
+            if (req.body.id) delete req.body.id;
             const order = new Order(req.body);
             const ret = await order.save();
             sendNotificationMail();

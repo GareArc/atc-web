@@ -1,6 +1,7 @@
 import { Alert, AlertTitle, Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
+import uuid from "react-uuid";
 
 export const ImportTab = (props) => {
   const { order, setOrder } = props;
@@ -15,6 +16,7 @@ export const ImportTab = (props) => {
       try {
         const importOrder = JSON.parse(json);
         const items = importOrder.lineItems.map(i => ({
+          id: uuid(),
           title: i.productNameContent.zh,
           type: 'All',
           shareType: 'WithT1',

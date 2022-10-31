@@ -1,9 +1,9 @@
 import { Avatar, Container, Dialog, DialogContent, DialogTitle, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from "@mui/material";
 import { Delete, ShoppingBag, Edit, FileCopy } from "@mui/icons-material";
-import uuid from "react-uuid";
 import { useEffect, useState } from "react";
 import { scrollToBottom } from "../../../utils/dom";
 import { ItemForm } from "../../../components/ItemForm";
+import uuid from "react-uuid";
 
 /**
  * 
@@ -38,12 +38,14 @@ export const ItemListTab = (props) => {
   }
 
   const deleteItem = (item) => {
-    const items = order.items.filter(i => i !== item);
+    const items = order.items.filter(i => i.id !== item.id);
     setOrder(o => ({ ...o, items: items }));
   }
 
   const handleDuplicate = (item) => {
-    setOrder(o => ({ ...o, items: o.items.concat(Object.assign({}, item)) }));
+    const dupItem = Object.assign({}, item);
+    dupItem.id = uuid();
+    setOrder(o => ({ ...o, items: o.items.concat(dupItem) }));
     scrollToBottom();
   }
 
@@ -87,7 +89,7 @@ export const ItemListTab = (props) => {
         <List>
           {order.items.map(item => (
             <ListItem
-              key={uuid()}
+              key={item.id}
               sx={{
                 minWidth: '400px',
                 borderBottom: '1px solid #1976d2'

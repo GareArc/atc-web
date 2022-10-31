@@ -1,8 +1,6 @@
 import { Button, Container, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch, TextField } from "@mui/material";
-import { useState } from "react";
 import { ItemForm } from "../../../components/ItemForm";
-import { parseNumberHelper } from "../../../utils/validations";
-
+import uuid from "react-uuid";
 /**
  * 
  * @param {{ 
@@ -13,6 +11,7 @@ import { parseNumberHelper } from "../../../utils/validations";
 export const NewItemTab = (props) => {
   const { order, setOrder } = props;
   const addItem = (item) => {
+    item.id = uuid();
     const items = order.items;
     items.push(item);
     setOrder(o => ({ ...o, items: items }));
