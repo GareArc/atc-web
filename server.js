@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const { config } = require('./config');
 
 // Connect to mongoDB
