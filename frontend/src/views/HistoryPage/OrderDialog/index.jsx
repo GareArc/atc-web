@@ -227,7 +227,7 @@ export const OrderDialog = (props) => {
                   <List component="div">
                     {selected.items.map(item => inTarget2List(selected, item) && (
                       <ListItem
-                        key={item_id}
+                        key={item._id}
                       >
                         <ListItemAvatar>
                           <Avatar>
