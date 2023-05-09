@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config('.env.production')
 
 const { config } = require('./config');
 

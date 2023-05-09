@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: process.env.NODE_ENV === "production" ? process.env.REACT_APP_API_URL : "http://localhost:8888/api",
+    baseURL: import.meta.env.VITE_API_URL,
+    // baseURL: "/api",
     headers: {
         "Content-Type": "application/json"
     },
