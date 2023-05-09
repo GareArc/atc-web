@@ -33,7 +33,7 @@ app.use("/api", require("./controllers/Order").router);
 
 // 404 Error
 app.use("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+    res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 module.exports = { app };
