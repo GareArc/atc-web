@@ -1,0 +1,18 @@
+{
+  "index.css": {
+    "file": "assets/index-0bb398ad.css",
+    "src": "index.css"
+  },
+  "index.html": {
+    "css": [
+      "assets/index-0bb398ad.css"
+    ],
+    "file": "assets/index-6496c73f.js",
+    "isEntry": true,
+    "src": "index.html"
+  },
+  "src/assets/favicon.ico": {
+    "file": "assets/favicon-7bea0187.ico",
+    "src": "src/assets/favicon.ico"
+  }
+}
